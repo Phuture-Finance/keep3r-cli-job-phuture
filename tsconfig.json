@@ -13,11 +13,9 @@
     "baseUrl": ".",
     "paths": {
       "@src": ["src"],
-      "@src/*": ["src/*"],
-      "@typechained": ["typechained/index"],
-      "@test-utils": ["test/utils/index"]
+      "@src/*": ["src/*"]
     },
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["node_modules/@types", "types"]
   },
   "exclude": ["node_modules", "dist"]
 }

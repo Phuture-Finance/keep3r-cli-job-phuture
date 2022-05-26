@@ -33,11 +33,10 @@
   },
   "dependencies": {
     "@keep3r-network/cli-utils": "1.0.0",
-    "ethers": "5.6.8"
+    "ethers": "5.6.8",
+    "undici": "5.3.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "17.0.1",
-    "@commitlint/config-conventional": "17.0.0",
     "@dethcrypto/eth-sdk": "0.3.2",
     "@dethcrypto/eth-sdk-client": "0.1.6",
     "@types/glob": "7.2.0",

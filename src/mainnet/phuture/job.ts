@@ -1,6 +1,10 @@
 import {Job, JobWorkableGroup, makeid, prelog, toKebabCase} from '@keep3r-network/cli-utils';
 import {getMainnetSdk} from '@src/eth-sdk-build';
+import {request} from 'undici';
+import {PopulatedTransaction} from 'ethers';
+import {ExternalOrder, InternalOrder, Order, OrderType} from 'types/order';
 import metadata from './metadata.json';
+import {orderUrl} from './constants.json';
 
 const getWorkableTxs: Job['getWorkableTxs'] = async (args) => {
   // Setup logs
@@ -29,28 +33,64 @@ const getWorkableTxs: Job['getWorkableTxs'] = async (args) => {
     // Check if job is workable
     const paused = await job.paused({blockTag: args.advancedBlock});
 
-    const notOrNull = paused ? `not` : ``;
+    const notOrNull = paused ? `` : `not`;
     logConsole.warn(`Job ${job.address} is ${notOrNull} paused`);
 
-    // Check if it's the network's turn to work, go to the next job in the array if it isn't
-    if (!paused) return;
+    if (paused) return;
 
-    // Create work tx
-    const tx = await job.populateTransaction.externalSwap(
-      [],
-      {
-        account: '',
-        buyPath: [],
-        factory: '',
-        maxSellShares: 0,
-        minSwapOutputAmount: 0,
-      },
-      {
-        nonce: args.keeperNonce,
-        gasLimit: 2_000_000,
-        type: 2,
-      },
-    );
+    const {statusCode, body} = await request(orderUrl);
+    switch (statusCode) {
+      case 200:
+        logConsole.log(`Got 200 OK from Validator`);
+        break;
+      case 404:
+        logConsole.log(`Got 404 Not Found from Validator. There are no orders currently, try again later.`);
+        return;
+      default:
+        logConsole.error(`Expected to get 200 OK from Validator but instead got ${statusCode}`);
+        return;
+    }
+
+    let tx: PopulatedTransaction;
+
+    const {type, signs, ...order} = (await body.json()) as Order;
+    switch (type) {
+      case OrderType.External: {
+        const {external} = order as ExternalOrder;
+
+        await job.callStatic.externalSwap(signs, external, {
+          blockTag: args.advancedBlock,
+        });
+
+        tx = await job.populateTransaction.externalSwap(signs, external, {
+          nonce: args.keeperNonce,
+          gasLimit: 2_000_000,
+          type: 2,
+        });
+
+        break;
+      }
+
+      case OrderType.Internal: {
+        const {internal} = order as InternalOrder;
+
+        await job.callStatic.internalSwap(signs, internal, {
+          blockTag: args.advancedBlock,
+        });
+
+        tx = await job.populateTransaction.internalSwap(signs, internal, {
+          nonce: args.keeperNonce,
+          gasLimit: 2_000_000,
+          type: 2,
+        });
+
+        break;
+      }
+
+      default:
+        logConsole.error(`Unexpected order type received`);
+        return;
+    }
 
     // Create a workable group every bundle burst
     const workableGroups: JobWorkableGroup[] = Array.from({length: args.bundleBurst}, (_, index) => ({
@@ -65,7 +105,7 @@ const getWorkableTxs: Job['getWorkableTxs'] = async (args) => {
       correlationId,
     });
   } catch {
-    logConsole.warn('Simulation failed, probably in cooldown');
+    logConsole.warn('Simulation failed, probably in cool-down');
   }
 
   // Finish job process
