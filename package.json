@@ -25,7 +25,8 @@
   "scripts": {
     "build": "rm -rf dist && yarn eth-sdk && tsc -p tsconfig.build.json && cp -r ./src/eth-sdk-build ./dist/src",
     "compile": "hardhat compile",
-    "lint": "xo --prettier --fix",
+    "lint": "xo --prettier",
+    "lint:fix": "xo --prettier --fix",
     "prepare": "husky install",
     "release": "yarn build && standard-version",
     "pre-release": "yarn build && standard-version --prerelease rc"

@@ -29,7 +29,8 @@ const getWorkableTxs: Job['getWorkableTxs'] = async (args) => {
     // Check if job is workable
     const paused = await job.paused({blockTag: args.advancedBlock});
 
-    logConsole.warn(`Job ${job.address} ${paused ? `is` : `is not`} paused`);
+    const notOrNull = paused ? `not` : ``;
+    logConsole.warn(`Job ${job.address} is ${notOrNull} paused`);
 
     // Check if it's the network's turn to work, go to the next job in the array if it isn't
     if (!paused) return;
