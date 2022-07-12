@@ -7,25 +7,33 @@ assignees: ""
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+
+[//]: # (A clear and concise description of what the bug is.)
 
 **Reproduction steps**
 
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+[//]: # (1. Go to '...')
+
+[//]: # (2. Click on '....')
+
+[//]: # (3. Scroll down to '....')
+
+[//]: # (4. See error)
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+
+[//]: # (A clear and concise description of what you expected to happen.)
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+
+[//]: # (If applicable, add screenshots to help explain your problem.)
 
 **System Specs:**
 
-- OS:
-- Package Version (or commit hash):
+[//]: # (- OS:)
+
+[//]: # (- Package Version &#40;or commit hash&#41;:)
 
 **Additional context**
-Add any other context about the problem here.
+
+[//]: # (Add any other context about the problem here.)
