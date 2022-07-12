@@ -15,7 +15,7 @@ This CLI Job enables The Keep3r Network keepers on Ethereum to execute the Phutu
     "jobs": [
         ...,
         {
-            "path": "node_modules/@phuture/keep3r-cli-job-phuture/dist/src/mainnet/maker"
+            "path": "node_modules/@phuture/keep3r-cli-job-phuture/dist/src/mainnet/phuture"
         }
     ]
 }
@@ -29,5 +29,4 @@ This CLI Job enables The Keep3r Network keepers on Ethereum to execute the Phutu
 
 * [Job](https://etherscan.io/address/0x133A4273589c2eE5F9Fe28898B68aC1B4B1BA9B0)
 * [Sequencer](https://etherscan.io/address/0x9566eB72e47E3E20643C0b1dfbEe04Da5c7E4732)
-* [Documentation](https://github.com/keep3r-network/keep3r.network/pull/52)
 * [Keep3r V1](https://etherscan.io/address/0x1ceb5cb57c4d4e2b2433641b95dd330a33185a44)
