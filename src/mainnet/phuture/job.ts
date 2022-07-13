@@ -1,8 +1,8 @@
 import {Job, JobWorkableGroup, makeid, prelog, toKebabCase} from '@keep3r-network/cli-utils';
-import {getMainnetSdk} from '@src/eth-sdk-build';
-import {request} from 'undici';
 import {PopulatedTransaction} from 'ethers';
-import {ExternalOrder, InternalOrder, Order, OrderType} from 'types/order';
+import {request} from 'undici';
+import {getMainnetSdk} from '../../eth-sdk-build';
+import {ExternalOrder, InternalOrder, Order, OrderType} from '../../types/order';
 import metadata from './metadata.json';
 import {orderUrl} from './constants.json';
 
