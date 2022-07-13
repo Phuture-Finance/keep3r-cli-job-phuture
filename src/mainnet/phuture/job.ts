@@ -75,7 +75,10 @@ const getWorkableTxs: Job['getWorkableTxs'] = async (args) => {
     const notOrNull = paused ? `` : `not`;
     logConsole.warn(`Job ${job.address} is ${notOrNull} paused`);
 
-    if (paused) return;
+    if (paused) {
+      args.subject.complete();
+      return;
+    }
 
     const {statusCode, body} = await request(orderUrl);
     switch (statusCode) {
@@ -84,9 +87,11 @@ const getWorkableTxs: Job['getWorkableTxs'] = async (args) => {
         break;
       case 404:
         logConsole.log(`Got 404 Not Found from Validator. There are no orders currently, try again later.`);
+        args.subject.complete();
         return;
       default:
         logConsole.error(`Expected to get 200 OK from Validator but instead got ${statusCode}`);
+        args.subject.complete();
         return;
     }
 
@@ -128,6 +133,7 @@ const getWorkableTxs: Job['getWorkableTxs'] = async (args) => {
 
       default:
         logConsole.error(`Unexpected order type received`);
+        args.subject.complete();
         return;
     }
 
