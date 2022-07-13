@@ -1,10 +1,49 @@
 import {Job, JobWorkableGroup, makeid, prelog, toKebabCase} from '@keep3r-network/cli-utils';
-import {PopulatedTransaction} from 'ethers';
+import {PopulatedTransaction, BigNumberish} from 'ethers';
 import {request} from 'undici';
 import {getMainnetSdk} from '../../eth-sdk-build';
-import {ExternalOrder, InternalOrder, Order, OrderType} from '../../types/order';
 import metadata from './metadata.json';
 import {orderUrl} from './constants.json';
+
+enum OrderType {
+  External = 'external',
+  Internal = 'internal',
+}
+
+interface Sign {
+  v: number;
+  r: string;
+  s: string;
+  signer: string;
+  deadline: string;
+}
+
+interface BaseOrder<T extends OrderType> {
+  type: T;
+  signs: Sign[];
+}
+
+interface InternalOrder extends BaseOrder<OrderType.Internal> {
+  internal: {
+    sellAccount: string;
+    buyAccount: string;
+    maxSellShares: BigNumberish;
+    buyPath: string[];
+  };
+}
+
+interface ExternalOrder extends BaseOrder<OrderType.External> {
+  external: {
+    router: string;
+    factory: string;
+    account: string;
+    maxSellShares: BigNumberish;
+    minSwapOutputAmount: BigNumberish;
+    buyPath: string[];
+  };
+}
+
+type Order = InternalOrder | ExternalOrder;
 
 const getWorkableTxs: Job['getWorkableTxs'] = async (args) => {
   // Setup logs
