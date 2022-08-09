@@ -4,7 +4,7 @@ export default defineConfig({
   outputPath: 'src/eth-sdk-build',
   contracts: {
     mainnet: {
-      job: '0x133A4273589c2eE5F9Fe28898B68aC1B4B1BA9B0',
+      job: '0x656027367B5e27dC21984B546e64dC24dBFaA187',
     },
   },
 });
