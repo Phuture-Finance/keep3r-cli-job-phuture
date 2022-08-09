@@ -1,9 +1,11 @@
 import {Job, JobWorkableGroup, makeid, prelog, toKebabCase} from '@keep3r-network/cli-utils';
-import {PopulatedTransaction, BigNumberish} from 'ethers';
+import {PopulatedTransaction, BigNumberish, BytesLike} from 'ethers';
 import {request} from 'undici';
-import {getMainnetSdk} from '../../eth-sdk-build';
+import {getMainnetSdk} from '@src/eth-sdk-build';
 import metadata from './metadata.json';
 import {orderUrl} from './constants.json';
+
+type Address = string;
 
 enum OrderType {
   External = 'external',
@@ -25,21 +27,22 @@ interface BaseOrder<T extends OrderType> {
 
 interface InternalOrder extends BaseOrder<OrderType.Internal> {
   internal: {
-    sellAccount: string;
-    buyAccount: string;
+    sellAccount: Address;
+    buyAccount: Address;
+    sellAsset: Address;
+    buyAsset: Address;
     maxSellShares: BigNumberish;
-    buyPath: string[];
   };
 }
 
 interface ExternalOrder extends BaseOrder<OrderType.External> {
   external: {
-    router: string;
-    factory: string;
-    account: string;
-    maxSellShares: BigNumberish;
-    minSwapOutputAmount: BigNumberish;
-    buyPath: string[];
+    account: Address;
+    sellAsset: Address;
+    buyAsset: Address;
+    sellShares: BigNumberish;
+    swapTarget: Address;
+    swapData: BytesLike;
   };
 }
 
