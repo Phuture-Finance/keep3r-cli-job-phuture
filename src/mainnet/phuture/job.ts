@@ -1,7 +1,7 @@
 import {Job, JobWorkableGroup, makeid, prelog, toKebabCase} from '@keep3r-network/cli-utils';
 import {PopulatedTransaction, BigNumberish, BytesLike} from 'ethers';
 import {request} from 'undici';
-import {getMainnetSdk} from '@src/eth-sdk-build';
+import {getMainnetSdk} from '../../eth-sdk-build';
 import metadata from './metadata.json';
 import {orderUrl} from './constants.json';
 
