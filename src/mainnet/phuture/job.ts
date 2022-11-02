@@ -100,7 +100,9 @@ const getWorkableTxs: Job['getWorkableTxs'] = async (args) => {
 
     let tx: PopulatedTransaction;
 
-    const {type, signs, ...order} = (await body.json()) as Order;
+    const response = (await body.json()) as {data: Order[]};
+    const {type, signs, ...order} = response.data[0];
+
     switch (type) {
       case OrderType.External: {
         const {external} = order as ExternalOrder;
